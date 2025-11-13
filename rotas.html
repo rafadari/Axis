@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Axis - Locais Próximos</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="rotas-container">
+    <h1>Locais Próximos</h1>
+    <p>Veja pontos de interesse ao seu redor</p>
+
+    <select id="tipo" class="rotas-btn">
+      <option value="restaurant">Restaurantes</option>
+      <option value="fuel">Postos de Gasolina</option>
+      <option value="bus_stop">Pontos de Ônibus</option>
+      <option value="supermarket">Supermercados</option>
+      <option value="hospital">Hospitais</option>
+    </select>
+    <button class="rotas-btn" onclick="buscarLocais()">Buscar</button>
+
+    <div id="mapid"></div>
+
+    <nav class="bottom-nav">
+      <a href="menu.html"><i class="fa-solid fa-house"></i><span>Início</span></a>
+      <a href="rotas.html"><i class="fa-solid fa-route"></i><span>Rotas</span></a>
+      <a href="perfil.html"><i class="fa-solid fa-user"></i><span>Perfil</span></a>
+    </nav>
+  </main>
+
+  <script>
+    let map, userMarker;
+    map = L.map('mapid').setView([-23.5505, -46.6333], 14);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
+        map.setView([lat, lon], 15);
+        userMarker = L.marker([lat, lon], {
+          icon: L.icon({
+            iconUrl: 'https://maps.gstatic.com/mapfiles/ms2/micons/blue-dot.png',
+            iconSize: [32, 32]
+          })
+        }).addTo(map).bindPopup("Você está aqui!");
+      });
+    }
+
+    function buscarLocais() {
+      const tipo = document.getElementById('tipo').value;
+      if (!userMarker) return alert('Aguardando localização...');
+
+      const { lat, lng } = userMarker.getLatLng();
+      const radius = 1000;
+      const overpassUrl = `https://overpass-api.de/api/interpreter?data=[out:json];node["amenity"="${tipo}"](around:${radius},${lat},${lng});out;`;
+
+      fetch(overpassUrl)
+        .then(res => res.json())
+        .then(data => {
+          if (!data.elements.length) {
+            alert('Nenhum local encontrado por perto.');
+            return;
+          }
+          data.elements.forEach(el => {
+            if (el.lat && el.lon) {
+              L.marker([el.lat, el.lon])
+                .addTo(map)
+                .bindPopup(`<b>${el.tags.name || 'Local'}</b><br>${tipo}`);
+            }
+          });
+        })
+        .catch(() => alert('Erro ao buscar locais próximos.'));
+    }
+  </script>
+</body>
+</html>

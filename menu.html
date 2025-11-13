@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Axis - Menu</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main class="menu-container">
+  <img src="img/logo.jpg" alt="Logo Axis" class="logo">
+  <h1>Bem-vindo ao Axis</h1>
+
+  <div class="menu-grid">
+    <div class="menu-item" onclick="window.location.href='rotas.html'">
+      <i class="fa-solid fa-bus"></i>
+      <p>Rotas</p>
+    </div>
+    <div class="menu-item" onclick="window.location.href='locais.html'">
+      <i class="fa-solid fa-location-dot"></i>
+      <p>Locais Próximos</p>
+    </div>
+    <div class="menu-item" onclick="window.location.href='passagens.html'">
+      <i class="fa-solid fa-ticket"></i>
+      <p>Passagens</p>
+    </div>
+    <div class="menu-item" onclick="alert('Favoritos em breve!')">
+      <i class="fa-solid fa-star"></i>
+      <p>Favoritos</p>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="menu.html" class="active"><i class="fa-solid fa-house"></i><span>Início</span></a>
+    <a href="rotas.html"><i class="fa-solid fa-route"></i><span>Rotas</span></a>
+    <a href="perfil.html"><i class="fa-solid fa-user"></i><span>Perfil</span></a>
+  </nav>
+</main>
+</body>
+</html>

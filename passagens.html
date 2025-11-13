@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Axis - Passagens</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="rotas-container">
+    <h1>Compra de Passagens</h1>
+    <p>Escolha sua rota e veja o valor</p>
+
+    <div class="input-group">
+      <label for="origem">Origem:</label>
+      <select id="origem" class="rotas-btn">
+        <option value="">Selecione</option>
+        <option value="Centro">Centro</option>
+        <option value="Zona Norte">Zona Norte</option>
+        <option value="Zona Sul">Zona Sul</option>
+        <option value="Terminal Leste">Terminal Leste</option>
+      </select>
+    </div>
+
+    <div class="input-group">
+      <label for="destino">Destino:</label>
+      <select id="destino" class="rotas-btn">
+        <option value="">Selecione</option>
+        <option value="Centro">Centro</option>
+        <option value="Zona Norte">Zona Norte</option>
+        <option value="Zona Sul">Zona Sul</option>
+        <option value="Terminal Leste">Terminal Leste</option>
+      </select>
+    </div>
+
+    <button class="rotas-btn" onclick="calcularPassagem()">Calcular Valor</button>
+
+    <div id="resultado" class="resultado"></div>
+
+    <nav class="bottom-nav">
+      <a href="menu.html"><i class="fa-solid fa-house"></i><span>Início</span></a>
+      <a href="rotas.html"><i class="fa-solid fa-route"></i><span>Rotas</span></a>
+      <a href="perfil.html"><i class="fa-solid fa-user"></i><span>Perfil</span></a>
+    </nav>
+  </main>
+
+  <script>
+    function calcularPassagem() {
+      const origem = document.getElementById('origem').value;
+      const destino = document.getElementById('destino').value;
+      const resultado = document.getElementById('resultado');
+
+      if (!origem || !destino) {
+        resultado.innerHTML = "<p style='color: #ff5555;'>Selecione origem e destino.</p>";
+        return;
+      }
+
+      if (origem === destino) {
+        resultado.innerHTML = "<p style='color: #ffaa00;'>Origem e destino não podem ser iguais.</p>";
+        return;
+      }
+
+      // Preços simulados
+      const tabela = {
+        "Centro-Zona Norte": 5.50,
+        "Centro-Zona Sul": 6.00,
+        "Centro-Terminal Leste": 4.80,
+        "Zona Norte-Zona Sul": 6.20,
+        "Zona Norte-Terminal Leste": 5.00,
+        "Zona Sul-Terminal Leste": 5.40
+      };
+
+      const rotaIda = `${origem}-${destino}`;
+      const rotaVolta = `${destino}-${origem}`;
+      const preco = tabela[rotaIda] || tabela[rotaVolta] || 6.00;
+
+      resultado.innerHTML = `
+        <div class="ticket">
+          <i class="fa-solid fa-ticket fa-2x"></i>
+          <p><strong>Rota:</strong> ${origem} → ${destino}</p>
+          <p><strong>Valor:</strong> R$ ${preco.toFixed(2)}</p>
+          <button class="rotas-btn" onclick="comprar()">Comprar</button>
+        </div>
+      `;
+    }
+
+    function comprar() {
+      alert('Compra realizada com sucesso! ✅');
+    }
+  </script>
+</body>
+</html>
